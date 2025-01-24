@@ -41,7 +41,25 @@ const state = reactive({
     isDeleteModal : false
 })
 
+const products = ref([]);
 
+const fetchProductData = async () => {
+  const { data, get } = useApi(config.PRODUCT_URL);
+
+  //console.log("Fetching data from API...");
+  await get(); // Wait for the API call to complete
+  //console.log("API response:", data.value); // Debug the API response
+
+  // Assign fetched data to products
+  products.value = data.value?.data || [];
+  //console.log("Updated products ref:", products.value); // Debug after updating
+
+  return {
+    products,
+  };
+};
+
+export { products, fetchProductData };
 
 export const fetchProduct = () => {
 
