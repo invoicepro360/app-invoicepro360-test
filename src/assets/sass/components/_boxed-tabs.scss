@@ -1,0 +1,16 @@
+@layer components {
+    .boxed-tabs {
+        a.active {
+            @apply bg-theme-1 text-white;
+        }
+    }
+
+    .dark {
+        .boxed-tabs-2 {
+            a.active {
+                @apply bg-theme-1 text-white;
+            }
+        }
+    }
+
+}

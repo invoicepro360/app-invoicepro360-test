@@ -1,0 +1,51 @@
+$grid-breakpoints: (
+  xs: 0,
+  sm: 640px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1280px,
+  2xl: 1536px,
+);
+
+// // Breakpoint up
+// @mixin media-breakpoint-up($screen) {
+//     @media (min-width: calc($grid-breakpoints[$screen] - 1px)) {
+//         @content;
+//     }
+// }
+
+// // Breakpoint down
+// @mixin media-breakpoint-down($screen) {
+//     @media (max-width: map-get($grid-breakpoints, $screen) - 1) {
+//         @content;
+//     }
+// }
+
+// // Breakpoint only
+// @mixin media-breakpoint-only($screen) {
+//     @media (width: map-get($grid-breakpoints, $screen)) {
+//         @content;
+//     }
+// }
+
+
+/* Breakpoint up */
+@mixin media-breakpoint-up($screen) {
+    @media (min-width: calc(theme("screens.#{$screen}") - 1px)) {    
+        @content;      
+    }
+  }
+  
+  /* Breakpoint down */
+  @mixin media-breakpoint-down($screen) {
+    @media (max-width: calc(theme("screens.#{$screen}") - 1px)) {      
+        @content;      
+    }
+  }
+  
+  /* Breakpoint only */
+  @mixin media-breakpoint-only($screen) {
+    @media (width: map-get($grid-breakpoints, $screen)) {      
+        @content;      
+    }
+  }
