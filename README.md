@@ -46,9 +46,15 @@ serve -s dist
 - click on create button its open new route with form. we want to convert that form into modalbox with save functionality.
 
 # Test 2 
-- Make a 2 routes called `subscription` and `checkout`
-- Design subscription page with 3 type of packages
+- Make two new routes called `subscription` and `checkout`
+- Design subscription page with three type of packages
 - Design normal checkout form
-- after login redirect to subscription page
-- click any of them redirect to checkout page
-- charge card & save checkout detail.
+- After login redirect to subscription page
+- Click any of them redirect to checkout page
+- Charge card & save checkout detail.
+  
+# Test 3
+- make new route called `signup`
+- Design registration form with validation
+- Store data and redirect to login page
+- Social login facebook,twitter etc
