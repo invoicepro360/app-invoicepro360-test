@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <TopBar
-      create-link-route="add-product"
+      @create-click="setIsOpen(true)"
       create-link-text="Add a New Product or Service"
       :can-create="permissions.create"
     >
@@ -52,208 +52,231 @@
 
     <!-- BEGIN: HTML Table Data -->
     <div class="col-span-12 mt-6">
-    <div class="intro-y border-l border-r border-b box">
-      <div class="overflow-x-auto scrollbar-hidden">
-        <div class="mt-8 overflow-auto intro-y lg:overflow-visible sm:mt-0">
-          <Table class="w-full text-left border-spacing-y-[10px] border-separate sm:mt-2">
-            <thead>
-              <tr>
-                <th class="font-medium px-5 py-3 dark:border-darkmode-300 border-b-0 whitespace-nowrap">
-                NAME
-                </th>
-                <th class="font-medium px-5 py-3 dark:border-darkmode-300 text-center border-b-0 whitespace-nowrap">
-                PRICE
-                </th>
-                <th class="font-medium px-5 py-3 dark:border-darkmode-300 text-center border-b-0 whitespace-nowrap">
-                DESCRIPTION
-                </th>
-                <th class="font-medium px-5 py-3 dark:border-darkmode-300 text-center border-b-0 whitespace-nowrap">
-                TYPE
-                </th>
-                <th class="font-medium px-5 py-3 dark:border-darkmode-300 text-center border-b-0 whitespace-nowrap">
-                STATUS
-                </th>
-                <th class="font-medium px-5 py-3 dark:border-darkmode-300 text-center border-b-0 whitespace-nowrap">
-                ACTIONS
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(product, index) in products"
-                :key="product.id"
-                class="intro-x"
-              >
-                <td
-                class="px-5 py-3 border-b dark:border-darkmode-300 box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600"
-                >
-                <a href="" class="font-medium whitespace-nowrap">
-                  {{ product.name }}
-                </a>
-                <div
-                  class="text-slate-500 text-xs whitespace-nowrap mt-0.5"
-                >
-                  {{ product.category }}
-                </div>
-                </td>
-                <td
-                class="px-5 py-3 border-b dark:border-darkmode-300 text-center box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600"
-                >
-                {{ product.price }}
-                </td>
-                <td class="px-5 py-3 border-b dark:border-darkmode-300 text-center box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600"><div class="flex lg:justify-center">{{ product.description }}</div></td>
-                <td class="px-5 py-3 border-b dark:border-darkmode-300 text-center box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">{{ product.type }}</td>
-                <td
-                class="px-5 py-3 border-b dark:border-darkmode-300 text-center box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600"
-                >
-                <div
-                  :class="[
-                  'flex items-center justify-center',
-                  { 'text-success': product.status },
-                  { 'text-danger': !product.status },
-                  ]"
-                >
-                  <Lucide icon="CheckSquare" class="w-4 h-4 mr-2" />
-                  {{ product.status ? "Active" : "Inactive" }}
-                </div>
-                </td>
-                <td
-                :class="[
-                  'box w-56 rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600',
-                  'before:absolute before:inset-y-0 before:left-0 before:my-auto before:block before:h-8 before:w-px before:bg-slate-200 before:dark:bg-darkmode-400',
-                ]"
-                >
-                <div class="flex items-center justify-center">
-                  <a class="flex items-center mr-3" href="">
-                  <Lucide icon="CheckSquare" class="w-4 h-4 mr-1" />
-                  Edit
-                  </a>
-                  <a class="flex items-center text-danger" href="">
-                  <Lucide icon="Trash2" class="w-4 h-4 mr-1" />
-                  Delete
-                  </a>
-                </div>
-                </td>
-            </tr>
-            </tbody>
-          </Table>
+      <div class="items-center block h-10 intro-y sm:flex">
+        <div class="flex items-center mt-3 sm:ml-auto sm:mt-0">
+          <Button
+          class="flex items-center !box text-slate-600 dark:text-slate-300"
+          >
+          <Lucide icon="FileText" class="hidden w-4 h-4 mr-2 sm:block" />
+          Export to Excel
+          </Button>
+          <Button
+          class="flex items-center ml-3 !box text-slate-600 dark:text-slate-300"
+          >
+          <Lucide icon="FileText" class="hidden w-4 h-4 mr-2 sm:block" />
+          Export to PDF
+          </Button>
         </div>
       </div>
-    </div>
-    <div
+      <div class="mt-8 overflow-auto intro-y lg:overflow-visible sm:mt-0">
+        <Table class="border-spacing-y-[10px] border-separate sm:mt-2">
+          <Table.Thead>
+          <Table.Tr>
+          <Table.Th class="border-b-0 whitespace-nowrap">
+          NAME
+          </Table.Th>
+          <Table.Th class="text-center border-b-0 whitespace-nowrap">
+          PRICE
+          </Table.Th>
+          <Table.Th class="text-center border-b-0 whitespace-nowrap">
+          DESCRIPTION
+          </Table.Th>
+          <Table.Th class="text-center border-b-0 whitespace-nowrap">
+          TYPE
+          </Table.Th>
+          <Table.Th class="text-center border-b-0 whitespace-nowrap">
+          STATUS
+          </Table.Th>
+          <Table.Th class="text-center border-b-0 whitespace-nowrap">
+          ACTIONS
+          </Table.Th>
+          </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>
+          <Table.Tr
+          v-for="(product, index) in products"
+          :key="product.id"
+          class="intro-x"
+          >
+          <Table.Td
+          class="box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600"
+          >
+          <a href="" class="font-medium whitespace-nowrap">
+            {{ product.name }}
+          </a>
+          <div
+            class="text-slate-500 text-xs whitespace-nowrap mt-0.5"
+          >
+            {{ product.category }}
+          </div>
+          </Table.Td>
+          <Table.Td
+          class="text-center box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600"
+          >
+          {{ product.price }}
+          </Table.Td>
+          <Table.Td class="text-center">{{ product.description }}</Table.Td>
+          <Table.Td class="text-center">{{ product.type }}</Table.Td>
+          <Table.Td
+          class="box w-40 rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600"
+          >
+          <div
+            :class="[
+            'flex items-center justify-center',
+            { 'text-success': product.status },
+            { 'text-danger': !product.status },
+            ]"
+          >
+            <Lucide icon="CheckSquare" class="w-4 h-4 mr-2" />
+            {{ product.status ? "Active" : "Inactive" }}
+          </div>
+          </Table.Td>
+          <Table.Td
+          :class="[
+            'box w-56 rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600',
+            'before:absolute before:inset-y-0 before:left-0 before:my-auto before:block before:h-8 before:w-px before:bg-slate-200 before:dark:bg-darkmode-400',
+          ]"
+          >
+          <div class="flex items-center justify-center">
+            <a class="flex items-center mr-3" href="">
+            <Lucide icon="CheckSquare" class="w-4 h-4 mr-1" />
+            Edit
+            </a>
+            <a class="flex items-center text-danger" href="">
+            <Lucide icon="Trash2" class="w-4 h-4 mr-1" />
+            Delete
+            </a>
+          </div>
+          </Table.Td>
+          </Table.Tr>
+          </Table.Tbody>
+        </Table>
+      </div>
+      <div
       class="flex flex-wrap items-center mt-3 intro-y sm:flex-row sm:flex-nowrap"
       >
-      <nav class="w-full sm:w-auto sm:mr-auto">
-        <ul class="flex w-full mr-0 sm:w-auto sm:mr-auto">
-        <li class="flex-1 sm:flex-initial">
-        <Lucide icon="ChevronsLeft" class="w-4 h-4" />
-        </li>
-        <li class="flex-1 sm:flex-initial">
-        <Lucide icon="ChevronLeft" class="w-4 h-4" />
-        </li>
-        <li class="flex-1 sm:flex-initial">...</li>
-        <li class="flex-1 sm:flex-initial">1</li>
-        <li class="flex-1 sm:flex-initial" active>2</li>
-        <li class="flex-1 sm:flex-initial">3</li>
-        <li class="flex-1 sm:flex-initial">...</li>
-        <li class="flex-1 sm:flex-initial">
-        <Lucide icon="ChevronRight" class="w-4 h-4" />
-        </li>
-        <li class="flex-1 sm:flex-initial">
-        <Lucide icon="ChevronsRight" class="w-4 h-4" />
-        </li>
-        </ul>
-      </nav>
-      <select class="disabled:bg-slate-100 disabled:cursor-not-allowed disabled:dark:bg-darkmode-800/50 [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 transition duration-200 ease-in-out text-sm border-slate-200 shadow-sm rounded-md py-2 px-3 pr-8 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 w-20 mt-3 !box sm:mt-0">
-        <option>10</option>
-        <option>25</option>
-        <option>35</option>
-        <option>50</option>
-      </select>
+        <Pagination class="w-full sm:w-auto sm:mr-auto">
+          <Pagination.Link>
+          <Lucide icon="ChevronsLeft" class="w-4 h-4" />
+          </Pagination.Link>
+          <Pagination.Link>
+          <Lucide icon="ChevronLeft" class="w-4 h-4" />
+          </Pagination.Link>
+          <Pagination.Link>...</Pagination.Link>
+          <Pagination.Link>1</Pagination.Link>
+          <Pagination.Link active>2</Pagination.Link>
+          <Pagination.Link>3</Pagination.Link>
+          <Pagination.Link>...</Pagination.Link>
+          <Pagination.Link>
+          <Lucide icon="ChevronRight" class="w-4 h-4" />
+          </Pagination.Link>
+          <Pagination.Link>
+          <Lucide icon="ChevronsRight" class="w-4 h-4" />
+          </Pagination.Link>
+        </Pagination>
+        <FormSelect class="w-20 mt-3 !box sm:mt-0">
+          <option>10</option>
+          <option>25</option>
+          <option>35</option>
+          <option>50</option>
+        </FormSelect>
       </div>
-      </div>
+    </div>
     <!-- END: HTML Table Data -->
     <DeleteModal
-      message="Do you really want to inactive the record?" 
+      message="Do you really want to inactive the record?"
       btn-text="Mark as Inactive"
       :isOpen="isDeleteModal"
       @delete="deleteProduct"
-      @close="isDeleteModal = false"    
+      @close="isDeleteModal = false"
     />
+    <!-- Modal -->
+    <Dialog
+      :open="isOpen"
+      @close="setIsOpen(false)"
+      class="relative z-50"
+    >
+      <div class="fixed inset-0 flex w-screen items-center justify-center p-4">
+        <DialogPanel>
+          <CreateForm @save="onSave" @close="setIsOpen(false)" />
+        </DialogPanel>
+      </div>
+    </Dialog>
   </div>
 </template>
 
-<script>
-import { defineComponent, onMounted, watch } from "vue";
+<script setup lang="ts">
+import Pagination from "@/components/Pagination";
+import Table from "@/components/Table";
+import { FormSelect } from "@/components/Form";
+import Button from "@/components/Button";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/vue";
+import CreateForm from "@/views/products/CreateForm.vue";
+import { ref, onMounted, watch, computed } from "vue";
+
 import {
-  fetchProductData,
-  products,
   fetchProduct,
   deleteProduct,
   showNotification,
   exportCSV,
 } from "@/compositions/products";
 
-export default defineComponent({
-  setup() {
-    // Define a function to load products asynchronously
-    const loadProducts = async () => {
-      await fetchProductData(); // Fetch data and update the `products` ref
-    };
 
-    const {
-      isNotify,
-      tableRef,
-      tabulator,
-      filters,
-      initTabulator,
-      reInitOnResizeWindow,
-      permissions,
-      isDeleteModal,
-    } = fetchProduct();
+const {
+  permissions,
+  products,
+  fetchProducts,
+  filters,
+  isDeleteModal,
+  isNotify,
+} = fetchProduct();
 
-    // On reset filter
-    const onResetFilter = () => {
-      filters.value.field = "";
-      filters.value.type = "";
-    };
+const isOpen = ref(false)
 
-    onMounted(() => {
-      loadProducts();
-      //initTabulator();
-      reInitOnResizeWindow();
-      filters.value.field = "";
-      filters.value.type = "";
-      // Notification for success / error
-      if (isNotify.value) showNotification();
-    });
+function setIsOpen(value: boolean) {
+  isOpen.value = value
+}
 
-    watch([isNotify], () => {
-      if (isNotify.value) showNotification();
-    });
+const onSave = async () => {
+  setIsOpen(false); // Close the modal after successful save
+};
 
-    watch([filters.value], () => {
-      tabulator.value.setFilter([
-        { field: "search", type: "like", value: filters.value.field },
-        { field: "type", type: "=", value: filters.value.type },
-      ]);
-    });
+// On reset filter
+const onResetFilter = () => {
+  filters.value.field = "";
+  filters.value.type = "";
+};
 
-    return {
-      products,
-      tableRef,
-      filters,
-      onResetFilter,
-      deleteProduct,
-      exportCSV,
-      permissions,
-      isDeleteModal,
-    };
-  },
+onMounted(() => {
+  fetchProducts();
+  filters.value.field = "";
+  filters.value.type = "";
+  // Notification for success / error
+  if (isNotify.value) showNotification();
 });
+
+watch([isNotify], () => {
+  if (isNotify.value) showNotification();
+});
+
+// watch([filters.value], () => {
+//   tabulator.value.setFilter([
+//     { field: "search", type: "like", value: filters.value.field },
+//     { field: "type", type: "=", value: filters.value.type },
+//   ]);
+// });
+
 </script>
 <style type="text/css">
 .tabulator-col-content .tabulator-col-title-holder {
   text-align: center !important;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
