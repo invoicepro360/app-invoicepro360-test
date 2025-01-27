@@ -235,7 +235,7 @@
                   type="button"
                   class="btn btn-default px-5 tracking-wider bg-white"
                   tabindex="9"
-                  @click="goBack"
+                  @click="$emit('close')"
                 >
                   Cancel
                 </button>

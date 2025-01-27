@@ -5,14 +5,9 @@
     </div>
     <slot name="search-form"></slot>
     <div class="flex ml-auto">
-      <router-link
-        v-if="canCreate"
-        class="add-btn"
-        :to="{ name: createLinkRoute }"
-        tag="button"
-      >
+      <button v-if="canCreate" @click="$emit('create-click')" class="btn btn-primary">
         {{ createLinkText }}
-      </router-link>
+      </button>
       <slot name="more-action"></slot>
     </div>
   </div>
