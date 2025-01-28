@@ -27,6 +27,14 @@
         </form>
       </div>
     </div>
+
+    <!-- Success Message -->
+    <div v-if="isPaymentSuccess" class="fixed inset-0 bg-green-500 bg-opacity-50 flex justify-center items-center z-50">
+      <div class="bg-white p-6 rounded-lg w-96 text-center">
+        <h3 class="text-xl font-semibold mb-4 text-green-600">Payment Successful!</h3>
+        <p>You have successfully purchased <strong>{{ packageName }}</strong>.</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,8 +43,30 @@ import { useCheckout } from "@/compositions/checkout";
 
 export default {
   setup() {
-    const { packageName, packagePrice, isModalOpen, cardNumber, expiryDate, cvv, openModal, closeModal, processPayment } = useCheckout();
-    return { packageName, packagePrice, isModalOpen, cardNumber, expiryDate, cvv, openModal, closeModal, processPayment };
+    const {
+      packageName,
+      packagePrice,
+      isModalOpen,
+      isPaymentSuccess,
+      cardNumber,
+      expiryDate,
+      cvv,
+      openModal,
+      closeModal,
+      processPayment,
+    } = useCheckout();
+    return {
+      packageName,
+      packagePrice,
+      isModalOpen,
+      isPaymentSuccess,
+      cardNumber,
+      expiryDate,
+      cvv,
+      openModal,
+      closeModal,
+      processPayment,
+    };
   },
 };
 </script>

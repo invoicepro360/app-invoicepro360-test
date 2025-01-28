@@ -42,12 +42,11 @@ export const authGuard = async (to, from, next) => {
     if (isLoggedin.value && user.value) {
         // Subscription expired or inactive, redirect to subscription page
         if (config.IS_SUBSCRIPTION_EXPIRE || config.IS_ON_TRAIL) {
-            next("/subscription");
             if (to.name !== 'subscription') {
+                next('/subscription'); // Redirect to the subscription page
             } else {
                 next();
             }
-            
         } else {
             // Refresh token logic and proceed to appropriate page
             refreshToken();
