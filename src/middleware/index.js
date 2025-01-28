@@ -1,5 +1,6 @@
 import { useAuth } from "@/compositions/auth"
 import cash from "cash-dom"
+import config from "@/config"
 
 const { user, useUser, refreshToken, isLoggedin, logout } = useAuth()
 
@@ -30,40 +31,37 @@ export const alreadyLoggedinGuard = async (to, from, next) => {
 }
 
 export const authGuard = async (to, from, next) => {
-
-    cash(".toastify").each((index,item) => {
+    cash(".toastify").each((index, item) => {
         cash(item).remove();
-    })
+    });
 
     if (!isLoggedin.value && !user.value) {
-        await useUser()
+        await useUser();
     }
 
     if (isLoggedin.value && user.value) {
-
-        //refresh token logic
-        refreshToken()
-        
-        if(to.name != 'multifactor-authentication' && !user.value.isValidMfa) {
-            
-            // console.log("MFA is invalid redirecting to verification form")
-            // next(user.value.default_business_id+"/multifactor-authentication")
-            next("/multifactor-authentication")
-
-        }else if(user.value.isValidMfa && to.name === 'multifactor-authentication'){
-            
-            // console.log("MFA is already valid redirecting to dashboard")
-            // next(user.value.default_business_id+"/dashboard")
-            next("/dashboard")
-
-        }else{
-            next()
+        // Subscription expired or inactive, redirect to subscription page
+        if (config.IS_SUBSCRIPTION_EXPIRE || config.IS_ON_TRAIL) {
+            if (to.name !== 'subscription') {
+                next('/subscription'); // Redirect to the subscription page
+            } else {
+                next();
+            }
+        } else {
+            // Refresh token logic and proceed to appropriate page
+            refreshToken();
+            if (to.name !== 'multifactor-authentication' && !user.value.isValidMfa) {
+                next("/multifactor-authentication");
+            } else if (user.value.isValidMfa && to.name === 'multifactor-authentication') {
+                next("/dashboard");
+            } else {
+                next();
+            }
         }
-        
     } else {
-        next("/login")
+        next("/login");
     }
-}
+};
 
 export const userInvitationGuard = (to, from, next) => {
  
