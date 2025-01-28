@@ -40,7 +40,8 @@ const config = {
     INVOICE_TEMPLATE_1: "classic",
     INVOICE_TEMPLATE_2: "professional",
     INVOICE_TEMPLATE_3: "modern",
-
+    IS_ON_TRAIL: false,
+    IS_SUBSCRIPTION_EXPIRE: false,
 }
 
 export default config

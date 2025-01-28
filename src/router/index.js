@@ -6,8 +6,9 @@ import SideMenu from "@/layouts/side-menu/Main.vue"
 import IconMenu from "@/layouts/icon-menu/Main.vue"
 import HealthCheck from "@/views/HealthCheck.vue"
 import Login from "@/views/auth/Login.vue"
-
 import ErrorPage from "@/views/error-page/Main.vue"
+import Subscription from "@/views/subscription.vue"
+import Checkout from "@/views/checkout.vue"
 import Dashboard from "@/views/dashboard/Main.vue"
 
 import Customers from "@/views/customers/Main.vue"
@@ -58,7 +59,30 @@ const routes = [
             title: '404 page not found',
         },
     },
-
+    {
+        path: "/",
+        children: [
+            // Subscription
+            {
+                path: "/subscription",
+                name: "subscription",
+                component: Subscription,
+                beforeEnter: authGuard,
+                meta: {
+                    title: 'subscription',
+                },
+            },
+            // Checkout
+            {
+                path: "/checkout",
+                name: "checkout",
+                component: Checkout,
+                meta: {
+                    title: "Checkout",
+                },
+            }, 
+        ]
+    },
     {
         path: "/",
         component: SideMenu,
